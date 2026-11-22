@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#f7f2e8">
+<title>文保打卡 · 全国重点文物保护单位地图</title>
+<meta name="description" content="聚合国家文物局公布的八批 5058 处全国重点文物保护单位，按省份、批次、类别与年代筛选，在地图上找到下一处想去访古的地方。 / Wenbao Daka: an interactive map of China’s National Key Cultural Heritage Sites.">
+<link rel="canonical" href="https://wenbaodaka.com/">
+<meta name="robots" content="index,follow">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="文保打卡 / Wenbao Daka">
+<meta property="og:title" content="文保打卡 · 全国重点文物保护单位地图">
+<meta property="og:description" content="5,058 处全国重点文物保护单位，可搜索、筛选、打卡与规划路线。 / An interactive map of China’s National Key Cultural Heritage Sites.">
+<meta property="og:url" content="https://wenbaodaka.com/">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="文保打卡 · 全国重点文物保护单位地图">
+<meta name="twitter:description" content="5,058 处全国重点文物保护单位，可搜索、筛选、打卡与规划路线。">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='10' fill='%23a63a2b'/%3E%3Ctext x='32' y='43' font-size='34' text-anchor='middle' fill='%23f7f2e8' font-family='serif'%3E%E6%96%87%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://bkimg.cdn.bcebos.com" crossorigin>
+<link rel="stylesheet" href="vendor/leaflet/leaflet.css">
+<link rel="stylesheet" href="vendor/markercluster/MarkerCluster.css">
+<link rel="stylesheet" href="vendor/markercluster/MarkerCluster.Default.css">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<svg class="svg-sprite" aria-hidden="true">
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.6-3.6"/></symbol>
+  <symbol id="i-map" viewBox="0 0 24 24"><path d="m3 6 6-3 6 3 6-3v15l-6 3-6-3-6 3z"/><path d="M9 3v15M15 6v15"/></symbol>
+  <symbol id="i-chart" viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></symbol>
+  <symbol id="i-bookmark" viewBox="0 0 24 24"><path d="M6 3h12v18l-6-4-6 4z"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="m4 12 5 5L20 6"/></symbol>
+  <symbol id="i-close" viewBox="0 0 24 24"><path d="M5 5l14 14M19 5 5 19"/></symbol>
+  <symbol id="i-filter" viewBox="0 0 24 24"><path d="M3 5h18M6 12h12M10 19h4"/></symbol>
+  <symbol id="i-compass" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m15.5 8.5-2 5-5 2 2-5z"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></symbol>
+  <symbol id="i-copy" viewBox="0 0 24 24"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3"/></symbol>
+  <symbol id="i-navi" viewBox="0 0 24 24"><path d="m3 11 18-8-8 18-2-8z"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+  <symbol id="i-minus" viewBox="0 0 24 24"><path d="M5 12h14"/></symbol>
+  <symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="7"/><circle cx="12" cy="12" r="2"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></symbol>
+  <symbol id="i-shuffle" viewBox="0 0 24 24"><path d="M3 6h4l10 12h4M17 6h4v4M3 18h4l3-3.6M14 9.5 17 6"/></symbol>
+  <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 3v12M7 10l5 5 5-5M4 21h16"/></symbol>
+  <symbol id="i-trash" viewBox="0 0 24 24"><path d="M4 7h16M9 7V4h6v3M6 7l1 14h10l1-14M10 11v6M14 11v6"/></symbol>
+  <symbol id="i-left" viewBox="0 0 24 24"><path d="m15 5-7 7 7 7"/></symbol>
+  <symbol id="i-right" viewBox="0 0 24 24"><path d="m9 5 7 7-7 7"/></symbol>
+  <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s7-6.2 7-12A7 7 0 0 0 5 9c0 5.8 7 12 7 12z"/><circle cx="12" cy="9" r="2.5"/></symbol>
+  <symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 10h18"/></symbol>
+  <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7h.01"/></symbol>
+  <symbol id="i-external" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M19 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h5"/></symbol>
+  <symbol id="i-layers" viewBox="0 0 24 24"><path d="m12 3 9 5-9 5-9-5z"/><path d="m3 12 9 5 9-5M3 16l9 5 9-5"/></symbol>
+  <symbol id="i-pen" viewBox="0 0 24 24"><path d="M4 20h4L20 8l-4-4L4 16z"/><path d="m14 6 4 4"/></symbol>
+  <symbol id="i-upload" viewBox="0 0 24 24"><path d="M12 16V4M7 9l5-5 5 5M4 21h16"/></symbol>
+  <symbol id="i-route" viewBox="0 0 24 24"><circle cx="6" cy="18" r="2.2"/><circle cx="18" cy="6" r="2.2"/><path d="M8.2 18H14a4 4 0 0 0 0-8H9a3 3 0 0 1 0-6h6.8"/></symbol>
+  <symbol id="i-spark" viewBox="0 0 24 24"><path d="M12 2l1.7 5.3L19 9l-5.3 1.7L12 16l-1.7-5.3L5 9l5.3-1.7z"/><path d="M19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8z"/></symbol>
+  <symbol id="i-train" viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="14" rx="4"/><path d="M5 10h14M8 17l-2 4M16 17l2 4M8 7h.01M16 7h.01"/></symbol>
+  <symbol id="i-car" viewBox="0 0 24 24"><path d="m4 14 2-5h12l2 5v5H4z"/><path d="M4 14h16M7 19v2M17 19v2"/><circle cx="7.5" cy="16" r="1.2"/><circle cx="16.5" cy="16" r="1.2"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+  <symbol id="i-plane" viewBox="0 0 24 24"><path d="m3 13 18-7-7 18-3-8z"/><path d="m11 16 3-3"/></symbol>
+  <symbol id="i-walk" viewBox="0 0 24 24"><circle cx="13" cy="4" r="2"/><path d="m10 8-2 5 3 2 1 6M10 8l4 3 3-1M8 21l2-6"/></symbol>
+  <symbol id="i-bus" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="13" rx="3"/><path d="M4 10h16M7 17v3M17 17v3M8 7h.01M16 7h.01"/></symbol>
+</svg>
+
+<header class="topbar">
+  <a class="brand" href="#/" aria-label="文保打卡首页">
+    <span class="brand-seal" data-no-i18n>文保</span>
+    <span class="brand-name">文保打卡<small>全国重点文物保护单位</small></span>
+  </a>
+  <nav class="main-nav" aria-label="主导航">
+    <button class="nav-btn is-active" data-view="explore">探索</button>
+    <button class="nav-btn" data-view="route"><svg class="nav-route-ico"><use href="#i-route"/></svg>AI 路线</button>
+    <button class="nav-btn" data-view="stats">数据</button>
+    <button class="nav-btn" data-view="mine">我的足迹<span class="nav-badge js-mine-badge" id="mineBadge">0</span></button>
+  </nav>
+  <div class="top-actions">
+    <label class="lang-switch" title="语言 / Language"><span class="sr-only">语言 / Language</span>
+      <select id="langSelect" aria-label="语言 / Language">
+        <option value="zh">简体</option>
+        <option value="zhHant">繁體</option>
+        <option value="en">EN</option>
+      </select>
+    </label>
+    <button class="top-btn" id="randomBtn" title="随机访古"><svg><use href="#i-shuffle"/></svg><span>随机访古</span></button>
+    <button class="top-btn ghost" id="aboutBtn" title="关于数据"><svg><use href="#i-info"/></svg><span>关于</span></button>
+  </div>
+</header>
+
+<nav class="mobile-nav" aria-label="移动端主导航">
+  <button class="nav-btn is-active" data-view="explore"><svg><use href="#i-compass"/></svg><span>探索</span></button>
+  <button class="nav-btn" data-view="route"><svg><use href="#i-route"/></svg><span>路线</span></button>
+  <button class="nav-btn" data-view="stats"><svg><use href="#i-chart"/></svg><span>数据</span></button>
+  <button class="nav-btn" data-view="mine"><svg><use href="#i-bookmark"/></svg><span>我的足迹</span><b class="nav-badge js-mine-badge">0</b></button>
+</nav>
+
+<main>
+  <section class="view" id="exploreView">
+    <section class="hero">
+      <div class="hero-bg" aria-hidden="true">
+        <svg viewBox="0 0 900 420" preserveAspectRatio="xMidYMid slice">
+          <g fill="none" stroke="currentColor" stroke-width="1">
+            <path d="M-20 330c120-90 210-120 330-64s200 40 300-36 220-70 330 8"/>
+            <path d="M-20 360c130-86 220-110 340-58s210 36 310-34 210-62 320 16"/>
+            <path d="M-20 300c110-96 200-128 320-70s205 44 305-32 220-72 335 4"/>
+            <path d="M80 420c30-70 100-110 180-96s120 62 210 20 150-70 240-22 140 22 220-18"/>
+          </g>
+        </svg>
+      </div>
+      <div class="hero-inner">
+        <div class="hero-copy">
+          <div class="eyebrow"><span></span>1961—2019 · 八批文保</div>
+          <h1>把五千年，<br><em>走成一张地图。</em></h1>
+          <p class="hero-lead">从第一批 180 处到第八批 762 处，按省份、批次、年代与类型逛一逛，把想去的地方收进自己的访古清单。</p>
+          <form class="hero-search" id="searchForm" role="search">
+            <svg class="search-icon"><use href="#i-search"/></svg>
+            <input id="searchInput" type="search" autocomplete="off" placeholder="搜一处文保：名称 / 别名 / 模糊匹配……" aria-label="搜索全国重点文物保护单位">
+            <kbd>/</kbd>
+            <button type="submit" class="search-go">搜索</button>
+          </form>
+          <div class="hero-quick" id="heroQuick">
+            <button data-quick="batch:1">第一批 · 1961</button>
+            <button data-quick="cat:2">古建筑</button>
+            <button data-quick="prov:山西">山西</button>
+            <button data-quick="random">随便看看</button>
+          </div>
+        </div>
+        <div class="hero-art" aria-hidden="true">
+          <div class="hero-seal" data-no-i18n>文保<small>打卡</small></div>
+          <div class="hero-note">五千年山河<br>皆在脚下</div>
+          <div class="hero-stats">
+            <div><strong id="heroTotal">5058</strong><span>处文保</span></div>
+            <div><strong>31</strong><span>个省级行政区</span></div>
+            <div><strong>8</strong><span>批公布</span></div>
+            <div><strong>6</strong><span>大类别</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="en-guide" id="enGuide" hidden>
+      <div class="en-guide-inner">
+        <div class="en-guide-head">
+          <span class="eyebrow"><span></span>FOR INTERNATIONAL VISITORS</span>
+          <h2>A field guide to China&rsquo;s protected heritage</h2>
+          <p>This map covers all 5,058 National Key Cultural Heritage Sites announced from 1961 to 2019. Use <strong>Explore</strong> to filter by period, province, city, category and batch; search works in English names and common Chinese names.</p>
+        </div>
+        <ul class="en-guide-list">
+          <li><strong>Names &amp; addresses</strong> stay in Chinese so you can show them to a taxi driver or copy them into a map app. Tap a site to see its official address and one-tap Amap / Baidu / Tencent links.</li>
+          <li><strong>AI Route</strong> automatically chooses high-speed rail or flights between cities, then walking, bus/metro or taxi in town. Train times are estimates: always check 12306 or a station counter for the exact train.</li>
+          <li><strong>Check-ins &amp; wishlist</strong> are stored only in this browser. Open <strong>My Trail</strong> to export a backup. Many sites are closed on Mondays or require booking; check the official notice before travelling.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="workspace">
+      <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+      <aside class="sidebar" id="sidebar">
+        <div class="sidebar-head">
+          <span><svg><use href="#i-filter"/></svg>筛选</span>
+          <div class="sidebar-head-actions">
+            <button id="resetFilters">重置</button>
+            <button class="sidebar-close" id="sidebarClose" aria-label="关闭筛选"><svg><use href="#i-close"/></svg></button>
+          </div>
+        </div>
+        <div class="filter-scroll">
+          <div class="filter-group">
+            <div class="filter-title">年代</div>
+            <select id="eraSelect" class="select"><option value="">全部年代</option></select>
+          </div>
+          <div class="filter-group">
+            <div class="filter-title">省份 <span class="filter-hint">按全国总量</span></div>
+            <div class="province-list" id="provinceList"></div>
+          </div>
+          <div class="filter-group">
+            <div class="filter-title">地级市 <span class="filter-hint" id="cityHint">先选省份</span></div>
+            <select id="citySelect" class="select" aria-label="地级市" disabled>
+              <option value="">先选择省份</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <div class="filter-title">文物类别</div>
+            <div class="chip-grid" id="catFilters"></div>
+          </div>
+          <div class="filter-group">
+            <div class="filter-title">公布批次</div>
+            <div class="chip-grid" id="batchFilters"></div>
+          </div>
+          <div class="filter-group">
+            <label class="switch-row">
+              <span>只看还没打卡的</span>
+              <input type="checkbox" id="onlyUnvisited">
+              <i></i>
+            </label>
+            <label class="switch-row">
+              <span>只看想去清单</span>
+              <input type="checkbox" id="onlyWish">
+              <i></i>
+            </label>
+          </div>
+        </div>
+        <div class="sidebar-foot">
+          <div class="mini-progress">
+            <div><span>我的打卡</span><b id="sideVisited">0</b></div>
+            <div class="bar"><i id="sideProgress"></i></div>
+            <small id="sideProgressText">0 / 5058</small>
+          </div>
+          <button class="text-link" id="sidebarAbout">数据从哪来？<svg><use href="#i-arrow"/></svg></button>
+        </div>
+      </aside>
+
+      <div class="main-panel">
+        <div class="result-bar">
+          <div class="result-main">
+            <button class="mobile-filter" id="mobileFilter"><svg><use href="#i-filter"/></svg>筛选</button>
+            <div class="result-count"><strong id="resultCount">5058</strong><span>处文保</span><span class="result-sub" id="resultSub">八批全部</span></div>
+            <div class="active-filters" id="activeFilters"></div>
+          </div>
+          <div class="result-actions">
+            <div class="segmented" id="viewToggle" role="group" aria-label="视图切换">
+              <button data-mode="both" class="is-active" title="地图与列表"><svg><use href="#i-map"/></svg><span>地图</span></button>
+              <button data-mode="map" title="仅地图"><svg><use href="#i-layers"/></svg><span>仅图</span></button>
+              <button data-mode="list" title="仅列表"><svg><use href="#i-bookmark"/></svg><span>列表</span></button>
+            </div>
+            <select id="sortSelect" class="select small" aria-label="排序方式">
+              <option value="default">批次 · 编号</option>
+              <option value="name">名称</option>
+              <option value="era">年代</option>
+              <option value="random">随机</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="mobile-prov-strip" id="mobileProvStrip" aria-label="各省文保数量"></div>
+
+        <div class="split" id="split">
+          <div class="map-panel">
+            <div id="map" role="application" aria-label="全国重点文物保护单位地图"></div>
+            <div class="map-top">
+              <div class="map-title">在地图上找一处</div>
+              <div class="map-sub" id="mapSub">点击省份可筛选 · 滚轮缩放</div>
+            </div>
+            <div class="map-tools">
+              <button id="zoomIn" title="放大" aria-label="放大"><svg><use href="#i-plus"/></svg></button>
+              <button id="zoomOut" title="缩小" aria-label="缩小"><svg><use href="#i-minus"/></svg></button>
+              <button id="zoomHome" title="回到全国" aria-label="回到全国"><svg><use href="#i-target"/></svg></button>
+              <button id="layerBtn" title="切换底图" aria-label="切换底图"><svg><use href="#i-layers"/></svg></button>
+            </div>
+            <div class="map-legend" id="mapLegend"></div>
+            <div class="map-foot">
+              <span>© 高德地图</span>
+              <span id="mapFootStats">5058 处 · 8 批</span>
+            </div>
+          </div>
+          <div class="list-panel">
+            <div class="list-head">
+              <span>名录</span>
+              <small id="listHint">按批次与编号排列</small>
+            </div>
+            <div class="site-list" id="siteList"></div>
+            <div class="list-sentinel" id="listSentinel"></div>
+            <div class="list-empty" id="listEmpty" hidden>
+              <div class="empty-seal">无</div>
+              <p>没有找到匹配的文保</p>
+              <button id="emptyReset">清空筛选</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </section>
+
+  <section class="view page-view route-view" id="routeView" hidden>
+    <div class="page-inner route-inner">
+      <header class="page-head route-head">
+        <div class="eyebrow"><span></span>AI ROUTE · 行程助手</div>
+        <h2>把想去的地方，<em>排成一条路。</em></h2>
+        <p>从你的「想去」清单出发，或框选一片区域按兴趣推荐。按地理顺序拆分每日行程，估算火车、自驾和混合交通的走法。</p>
+      </header>
+
+      <div class="route-layout">
+        <div class="route-panel">
+          <div class="route-tabs" id="routeModeTabs" role="tablist">
+            <button type="button" data-route-mode="wish" class="is-active" role="tab" aria-selected="true">按想去清单</button>
+            <button type="button" data-route-mode="fuzzy" role="tab" aria-selected="false">按兴趣区域</button>
+          </div>
+
+          <div class="route-mode-panel" id="routeWishPanel">
+            <div class="route-panel-head">
+              <div>
+                <strong>我的想去清单</strong>
+                <span id="routeWishCount">0 处</span>
+              </div>
+              <a href="#/" class="route-mini-link" data-route-explore>去探索添加 →</a>
+            </div>
+            <div class="route-wish-list" id="routeWishList"></div>
+            <div class="route-empty" id="routeWishEmpty">
+              还没有标记想去的地方。去地图或名录里点开一处文保，点一下「想去」就会出现在这里。
+            </div>
+          </div>
+
+          <div class="route-mode-panel" id="routeFuzzyPanel" hidden>
+            <div class="route-field">
+              <div class="route-label">想看什么 <small>可多选</small></div>
+              <div class="chip-grid route-cat-chips" id="routeCatChips"></div>
+            </div>
+            <div class="route-grid-2">
+              <label class="route-field">
+                <span class="route-label">年代</span>
+                <select id="routeEra" class="select"><option value="">不限年代</option></select>
+              </label>
+              <label class="route-field">
+                <span class="route-label">省份</span>
+                <select id="routeProvince" class="select"><option value="">不限省份</option></select>
+              </label>
+            </div>
+            <label class="route-field">
+              <span class="route-label">城市 <small>可选</small></span>
+              <select id="routeCity" class="select"><option value="">不限城市</option></select>
+            </label>
+            <div class="route-region-box">
+              <div>
+                <strong>大致区域</strong>
+                <span id="routeRegionLabel">未框选</span>
+              </div>
+              <div class="route-region-actions">
+                <button type="button" class="route-btn small" id="routeDrawBtn">在地图上框选</button>
+                <button type="button" class="route-btn small" id="routeUseViewBtn">用当前范围</button>
+                <button type="button" class="route-btn ghost small" id="routeClearRegion">清除框选</button>
+              </div>
+            </div>
+            <div class="route-hint">手机上先把地图缩放 / 拖动到目标区域，再点「用当前范围」；也可以直接按省份 / 城市筛选。</div>
+          </div>
+
+          <div class="route-common">
+            <div class="route-grid-2">
+              <label class="route-field route-origin-field">
+                <span class="route-label">出发地</span>
+                <span class="route-origin-row">
+                  <input id="routeOrigin" class="route-input" list="routeCityOptions" placeholder="如：北京 / 太原" autocomplete="off">
+                  <button type="button" class="route-locate" id="routeLocate" title="使用当前位置"><svg><use href="#i-target"/></svg></button>
+                </span>
+                <datalist id="routeCityOptions"></datalist>
+              </label>
+              <label class="route-field">
+                <span class="route-label">天数</span>
+                <select id="routeDays" class="select">
+                  <option value="1">1 天</option>
+                  <option value="2">2 天</option>
+                  <option value="3" selected>3 天</option>
+                  <option value="4">4 天</option>
+                  <option value="5">5 天</option>
+                  <option value="6">6 天</option>
+                  <option value="7">7 天</option>
+                </select>
+              </label>
+            </div>
+            <label class="route-field">
+              <span class="route-label">出发日期 <small>用于车次 / 航班查询</small></span>
+              <input id="routeDate" class="route-input" type="date">
+            </label>
+            <div class="route-grid-2">
+              <label class="route-field">
+                <span class="route-label">节奏</span>
+                <select id="routePace" class="select">
+                  <option value="easy">轻松 · 每天 2 处</option>
+                  <option value="standard" selected>标准 · 每天 3 处</option>
+                  <option value="tight">紧凑 · 每天 4 处</option>
+                </select>
+              </label>
+              <label class="route-field">
+                <span class="route-label">当地交通 <small>车站/景点之间</small></span>
+                <select id="routeLocal" class="select">
+                  <option value="auto" selected>自动：近步行 / 中公交 / 远打车</option>
+                  <option value="transit">公共交通优先</option>
+                  <option value="taxi">打车为主</option>
+                </select>
+              </label>
+            </div>
+            <div class="route-hint">交通方式由系统按距离自动选择：跨城优先高铁 / 动车，远途比较飞机；市内按距离安排步行、公交或打车。</div>
+            <label class="route-check">
+              <input type="checkbox" id="routeExcludeVisited">
+              <span>排除已打卡</span>
+            </label>
+          </div>
+
+          <div class="route-actions">
+            <button type="button" class="route-generate" id="routeGenerate">生成路线 <svg><use href="#i-spark"/></svg></button>
+            <span class="route-status" id="routeStatus">本地智能规划 · 车次 / 航班 / 开放时间以官方为准</span>
+            <button type="button" class="route-load" id="routeLoadSaved" hidden>读取上次路线</button>
+          </div>
+        </div>
+
+        <aside class="route-map-card">
+          <div class="route-map-head">
+            <div>
+              <strong>路线地图</strong>
+              <span id="routeMapCount">—</span>
+            </div>
+            <span class="route-map-legend"><i></i>候选点</span>
+          </div>
+          <div class="route-map" id="routeMap"></div>
+          <div class="route-map-tools">
+            <button type="button" class="route-map-btn" id="routeMapDraw">框选区域</button>
+            <button type="button" class="route-map-btn" id="routeMapUseView">用当前范围</button>
+            <button type="button" class="route-map-btn ghost" id="routeMapClear">清除框选</button>
+            <span id="routeMapRegion">中国 · 未框选</span>
+          </div>
+          <div class="route-map-hint" id="routeMapHint">手机上先缩放 / 拖动地图，再点「用当前范围」；桌面也可以拖矩形框选。</div>
+        </aside>
+      </div>
+
+      <div class="route-result" id="routeResult">
+        <div class="route-result-empty">
+          <div class="route-result-mark">路</div>
+          <h3>还没有生成路线</h3>
+          <p>先去「想去」里收几处文保，或者切到「按兴趣区域」，框一片地方，让行程助手排一下。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="view page-view" id="statsView" hidden>
+    <div class="page-inner">
+      <header class="page-head">
+        <div class="eyebrow"><span></span>DATA · 八批文保</div>
+        <h2>5058 处文保，<em>如何分布？</em></h2>
+        <p>从省份、批次、类别与年代四个切面，看看这份跨越五千年的名单。</p>
+      </header>
+      <div id="statsContent"></div>
+    </div>
+  </section>
+
+  <section class="view page-view" id="mineView" hidden>
+    <div class="page-inner">
+      <header class="page-head">
+        <div class="eyebrow"><span></span>MY TRAIL · 我的足迹</div>
+        <h2>你走过的，<em>才是你的。</em></h2>
+        <p>打卡与想去都只保存在这台设备的浏览器里，不会上传。可以随时导出备份。</p>
+      </header>
+      <div id="mineContent"></div>
+    </div>
+  </section>
+</main>
+
+<div class="drawer-backdrop" id="drawerBackdrop"></div>
+<aside class="drawer" id="drawer" aria-hidden="true" aria-label="文保详情">
+  <div class="drawer-scroll" id="drawerContent"></div>
+</aside>
+
+<div class="modal-backdrop" id="modalBackdrop"></div>
+<div class="modal" id="aboutModal" role="dialog" aria-modal="true" aria-labelledby="aboutTitle" hidden>
+  <button class="modal-close" id="aboutClose" aria-label="关闭"><svg><use href="#i-close"/></svg></button>
+  <div class="modal-body">
+    <div class="eyebrow"><span></span>ABOUT THE DATA</div>
+    <h2 id="aboutTitle">关于这份名单</h2>
+    <p>「全国重点文物保护单位」是中国不可移动文物的最高保护级别。1961 年至 2019 年，国务院先后公布八批，共 5058 处（不含合并项目）。本站把它们整理成可搜索、可筛选、可打卡的地图。</p>
+    <h3>数据来源</h3>
+    <ul class="source-list" id="sourceList"></ul>
+    <h3>坐标与地址</h3>
+    <p id="aboutDisclaimer"></p>
+    <p>点位由公开地理编码数据生成；少部分较早批次或同名文保单位的坐标存在偏差，本站结合官方公布地址对明显偏离的点位做了校正。若你发现错误，欢迎以官方公布信息为准。</p>
+    <h3>图文说明</h3>
+    <p>简介与图片主要来自百度百科（缺失项由本站根据国家文物局公布名录整理），版权归原作者及百度百科所有，仅用于本页面展示；如权利人认为不妥，请联系删除。</p>
+    <h3>打卡说明</h3>
+    <p>「打卡」和「想去」只写入浏览器 localStorage，不会上传服务器。清理浏览器数据会丢失记录，建议在「我的足迹」中导出备份。</p>
+    <h3>版本</h3>
+    <p>文保打卡 v1.0 · 数据构建于 <span id="buildDate">2026</span> · 共 <span id="aboutTotal">5058</span> 处</p>
+    <div class="modal-foot">
+      <a href="https://www.ncha.gov.cn/" target="_blank" rel="noopener">国家文物局<svg><use href="#i-external"/></svg></a>
+      <a href="https://doi.org/10.3974/geodb.2024.01.09.V1" target="_blank" rel="noopener">坐标数据集 DOI<svg><use href="#i-external"/></svg></a>
+    </div>
+  </div>
+</div>
+
+<div class="lightbox" id="lightbox" hidden>
+  <button class="lightbox-close" id="lightboxClose" aria-label="关闭图片"><svg><use href="#i-close"/></svg></button>
+  <img id="lightboxImg" alt="" referrerpolicy="no-referrer">
+  <div class="lightbox-caption" id="lightboxCaption"></div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<button class="back-top" id="backTop" aria-label="回到顶部"><svg><use href="#i-left"/></svg></button>
+
+<script src="vendor/leaflet/leaflet.js"></script>
+<script src="vendor/markercluster/leaflet.markercluster.js"></script>
+<script type="module" src="js/app.js"></script>
+</body>
+</html>
